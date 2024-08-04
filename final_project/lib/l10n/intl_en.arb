@@ -4,10 +4,14 @@
   "addAirplane": "Add Airplane",
   "airplaneType": "Airplane Type",
   "numberOfPassengers": "Number of Passengers",
-  "passengers": "{number} passengers",
   "maxSpeed": "Max Speed",
   "range": "Range",
   "update": "Update",
   "delete": "Delete",
-  "instructions": "Instructions on how to use the interface."
+  "selectAirplaneDetails": "Select an airplane to view details",
+  "error": "Error",
+  "fillAllFields": "Please fill all fields",
+  "ok": "OK",
+  "passengers": "{count} passengers",
+  "noAirplanesFound": "No airplanes found"
 }

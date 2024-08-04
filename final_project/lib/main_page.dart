@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
-import 'airplane_list_page.dart'; // Import the AirplaneListPage
+import 'airplane_list_page.dart';
 import 'generated/l10n.dart';
 
-class MainPage extends StatelessWidget {
-  final Function(Locale) changeLanguage;
+class MainPage extends StatefulWidget {
+  final void Function(Locale) setLocale;
 
-  MainPage({required this.changeLanguage});
+  MainPage({required this.setLocale});
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  Locale _selectedLocale = Locale('en');
+
+  void _switchLanguage(Locale locale) {
+    setState(() {
+      _selectedLocale = locale;
+    });
+    widget.setLocale(locale);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,25 +27,23 @@ class MainPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(S.of(context).appTitle),
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'en') {
-                changeLanguage(Locale('en'));
-              } else if (value == 'zh') {
-                changeLanguage(Locale('zh'));
+          DropdownButton<Locale>(
+            value: _selectedLocale,
+            icon: Icon(Icons.language, color: Colors.white),
+            items: [
+              DropdownMenuItem(
+                value: Locale('en'),
+                child: Text('English'),
+              ),
+              DropdownMenuItem(
+                value: Locale('zh'),
+                child: Text('中文'),
+              ),
+            ],
+            onChanged: (Locale? newValue) {
+              if (newValue != null) {
+                _switchLanguage(newValue);
               }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  value: 'en',
-                  child: Text('English'),
-                ),
-                PopupMenuItem(
-                  value: 'zh',
-                  child: Text('中文'),
-                ),
-              ];
             },
           ),
         ],
@@ -47,8 +59,9 @@ class MainPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => AirplaneListPage()),
                 );
               },
-              child: Text(S.of(context).airplaneList), // Change the button text to "Airplane List"
+              child: Text(S.of(context).airplaneList),
             ),
+            // Add other buttons for different parts of the project
           ],
         ),
       ),

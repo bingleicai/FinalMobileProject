@@ -3,11 +3,15 @@
   "airplaneList": "飞机列表",
   "addAirplane": "添加飞机",
   "airplaneType": "飞机类型",
-  "numberOfPassengers": "乘客数量",
-  "passengers": "{number} 乘客",
-  "maxSpeed": "最大速度",
+  "numberOfPassengers": "乘客人数",
+  "maxSpeed": "最高速度",
   "range": "航程",
   "update": "更新",
   "delete": "删除",
-  "instructions": "如何使用界面的说明。"
+  "selectAirplaneDetails": "选择一个飞机查看详细信息",
+  "error": "错误",
+  "fillAllFields": "请填写所有字段",
+  "ok": "好的",
+  "passengers": "{count} 乘客",
+  "noAirplanesFound": "没有找到飞机"
 }

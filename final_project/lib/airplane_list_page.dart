@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 import 'generated/l10n.dart';
-import 'add_airplane_page.dart';
-import 'airplane_detail_page.dart';
+import 'airplane_form_page.dart';
+import 'models/airplane.dart';
 
 class AirplaneListPage extends StatefulWidget {
   @override
@@ -11,6 +11,8 @@ class AirplaneListPage extends StatefulWidget {
 
 class _AirplaneListPageState extends State<AirplaneListPage> {
   List<Airplane> _airplanes = [];
+  Airplane? _selectedAirplane;
+  bool _isAddingAirplane = false;
   DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
@@ -26,48 +28,134 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
     });
   }
 
+  void _navigateToAddAirplane() {
+    setState(() {
+      _isAddingAirplane = true;
+      _selectedAirplane = null;
+    });
+    if (MediaQuery.of(context).size.width <= 600) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AirplaneFormPage(airplane: null),
+        ),
+      ).then((value) {
+        _loadAirplanes();
+      });
+    }
+  }
+
+  void _navigateToEditAirplane(Airplane airplane) {
+    setState(() {
+      _isAddingAirplane = false;
+      _selectedAirplane = airplane;
+    });
+    if (MediaQuery.of(context).size.width <= 600) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AirplaneFormPage(airplane: airplane),
+        ),
+      ).then((value) {
+        _loadAirplanes();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).airplaneList),
-      ),
-      body: _airplanes.isEmpty
-          ? Center(child: Text('No airplanes found'))
-          : ListView.builder(
-        itemCount: _airplanes.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_airplanes[index].type),
-            subtitle: Text(S.of(context).passengers(_airplanes[index].numberOfPassengers.toString())),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AirplaneDetailPage(airplane: _airplanes[index]),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 600) {
+          return Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(S.of(context).airplaneList),
+                  ),
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: _airplanes.isEmpty
+                            ? Center(child: Text(S.of(context).noAirplanesFound))
+                            : ListView.builder(
+                          itemCount: _airplanes.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(_airplanes[index].type),
+                              subtitle: Text(S.of(context).passengers(_airplanes[index].numberOfPassengers)),
+                              onTap: () {
+                                _navigateToEditAirplane(_airplanes[index]);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ElevatedButton(
+                          onPressed: _navigateToAddAirplane,
+                          child: Text(S.of(context).addAirplane),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ).then((value) {
-                if (value == true) {
-                  _loadAirplanes(); // Reload the list after updating or deleting an airplane
-                }
-              });
-            },
+              ),
+              Expanded(
+                flex: 3,
+                child: _isAddingAirplane || _selectedAirplane != null
+                    ? AirplaneFormPage(airplane: _selectedAirplane)
+                    : Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Center(
+                    child: Text(
+                      S.of(context).selectAirplaneDetails,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddAirplanePage()),
-          ).then((value) {
-            if (value == true) {
-              _loadAirplanes(); // Reload the list after adding a new airplane
-            }
-          });
-        },
-        child: Icon(Icons.add),
-      ),
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(S.of(context).airplaneList),
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: _airplanes.isEmpty
+                      ? Center(child: Text(S.of(context).noAirplanesFound))
+                      : ListView.builder(
+                    itemCount: _airplanes.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(_airplanes[index].type),
+                        subtitle: Text(S.of(context).passengers(_airplanes[index].numberOfPassengers)),
+                        onTap: () => _navigateToEditAirplane(_airplanes[index]),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: _navigateToAddAirplane,
+                    child: Text(S.of(context).addAirplane),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

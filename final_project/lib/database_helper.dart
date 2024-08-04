@@ -1,50 +1,17 @@
-import 'dart:async';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
-class Airplane {
-  int? id;
-  String type;
-  int numberOfPassengers;
-  double maxSpeed;
-  double range;
-
-  Airplane({
-    this.id,
-    required this.type,
-    required this.numberOfPassengers,
-    required this.maxSpeed,
-    required this.range,
-  });
-
-  // Convert an Airplane object into a Map object
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'type': type,
-      'numberOfPassengers': numberOfPassengers,
-      'maxSpeed': maxSpeed,
-      'range': range,
-    };
-  }
-
-  // Extract an Airplane object from a Map object
-  factory Airplane.fromMap(Map<String, dynamic> map) {
-    return Airplane(
-      id: map['id'],
-      type: map['type'],
-      numberOfPassengers: map['numberOfPassengers'],
-      maxSpeed: map['maxSpeed'],
-      range: map['range'],
-    );
-  }
-}
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path/path.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'models/airplane.dart';  // Import the Airplane class
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() => _instance;
-
   static Database? _database;
+
+  factory DatabaseHelper() {
+    return _instance;
+  }
 
   DatabaseHelper._internal();
 
@@ -55,6 +22,11 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
+    if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+
     String path = join(await getDatabasesPath(), 'airplanes.db');
     return await openDatabase(
       path,
@@ -63,19 +35,16 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute(
-      'CREATE TABLE airplanes(id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT, numberOfPassengers INTEGER, maxSpeed REAL, range REAL)',
-    );
-  }
-
-  Future<void> insertAirplane(Airplane airplane) async {
-    final db = await database;
-    await db.insert(
-      'airplanes',
-      airplane.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE airplanes (
+        id INTEGER PRIMARY KEY,
+        type TEXT,
+        numberOfPassengers INTEGER,
+        maxSpeed REAL,
+        range REAL
+      )
+    ''');
   }
 
   Future<List<Airplane>> getAirplanes() async {
@@ -85,6 +54,15 @@ class DatabaseHelper {
     return List.generate(maps.length, (i) {
       return Airplane.fromMap(maps[i]);
     });
+  }
+
+  Future<void> insertAirplane(Airplane airplane) async {
+    final db = await database;
+    await db.insert(
+      'airplanes',
+      airplane.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<void> updateAirplane(Airplane airplane) async {
