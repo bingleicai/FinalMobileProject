@@ -1,0 +1,13 @@
+{
+  "appTitle": "飞机应用",
+  "airplaneList": "飞机列表",
+  "addAirplane": "添加飞机",
+  "airplaneType": "飞机类型",
+  "numberOfPassengers": "乘客数量",
+  "passengers": "{number} 乘客",
+  "maxSpeed": "最大速度",
+  "range": "航程",
+  "update": "更新",
+  "delete": "删除",
+  "instructions": "如何使用界面的说明。"
+}

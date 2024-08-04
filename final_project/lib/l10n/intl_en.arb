@@ -1,0 +1,13 @@
+{
+  "appTitle": "Airplane App",
+  "airplaneList": "Airplane List",
+  "addAirplane": "Add Airplane",
+  "airplaneType": "Airplane Type",
+  "numberOfPassengers": "Number of Passengers",
+  "passengers": "{number} passengers",
+  "maxSpeed": "Max Speed",
+  "range": "Range",
+  "update": "Update",
+  "delete": "Delete",
+  "instructions": "Instructions on how to use the interface."
+}

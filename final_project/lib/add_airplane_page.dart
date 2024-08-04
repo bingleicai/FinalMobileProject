@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
+import 'generated/l10n.dart';
 
 class AddAirplanePage extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Airplane'),
+        title: Text(S.of(context).addAirplane),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -27,44 +28,44 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Airplane Type'),
+                decoration: InputDecoration(labelText: S.of(context).airplaneType),
                 onSaved: (value) => _type = value!,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter airplane type';
+                    return S.of(context).airplaneType;
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Number of Passengers'),
+                decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _numberOfPassengers = int.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter number of passengers';
+                    return S.of(context).numberOfPassengers;
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Max Speed'),
+                decoration: InputDecoration(labelText: S.of(context).maxSpeed),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _maxSpeed = double.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter max speed';
+                    return S.of(context).maxSpeed;
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Range'),
+                decoration: InputDecoration(labelText: S.of(context).range),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _range = double.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter range';
+                    return S.of(context).range;
                   }
                   return null;
                 },
@@ -72,7 +73,7 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addAirplane,
-                child: Text('Add Airplane'),
+                child: Text(S.of(context).addAirplane),
               ),
             ],
           ),
@@ -90,12 +91,11 @@ class _AddAirplanePageState extends State<AddAirplanePage> {
         maxSpeed: _maxSpeed,
         range: _range,
       );
-      print('Adding Airplane: $newAirplane'); // Debugging statement
       _databaseHelper.insertAirplane(newAirplane).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Airplane added successfully')),
+          SnackBar(content: Text(S.of(context).addAirplane)),
         );
-        Navigator.pop(context);
+        Navigator.pop(context, true); // Return true to indicate success
       });
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
+import 'generated/l10n.dart';
 
 class AirplaneDetailPage extends StatefulWidget {
   final Airplane airplane;
@@ -27,11 +28,39 @@ class _AirplaneDetailPageState extends State<AirplaneDetailPage> {
     _range = widget.airplane.range;
   }
 
+  void _updateAirplane() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      Airplane updatedAirplane = Airplane(
+        id: widget.airplane.id,
+        type: _type,
+        numberOfPassengers: _numberOfPassengers,
+        maxSpeed: _maxSpeed,
+        range: _range,
+      );
+      _databaseHelper.updateAirplane(updatedAirplane).then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).update)),
+        );
+        Navigator.pop(context, true); // Return true to indicate success
+      });
+    }
+  }
+
+  void _deleteAirplane() {
+    _databaseHelper.deleteAirplane(widget.airplane.id!).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).delete)),
+      );
+      Navigator.pop(context, true); // Return true to indicate success
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Airplane Details'),
+        title: Text(S.of(context).airplaneType),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -41,47 +70,47 @@ class _AirplaneDetailPageState extends State<AirplaneDetailPage> {
             children: [
               TextFormField(
                 initialValue: _type,
-                decoration: InputDecoration(labelText: 'Airplane Type'),
+                decoration: InputDecoration(labelText: S.of(context).airplaneType),
                 onSaved: (value) => _type = value!,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter airplane type';
+                    return S.of(context).airplaneType;
                   }
                   return null;
                 },
               ),
               TextFormField(
                 initialValue: _numberOfPassengers.toString(),
-                decoration: InputDecoration(labelText: 'Number of Passengers'),
+                decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _numberOfPassengers = int.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter number of passengers';
+                    return S.of(context).numberOfPassengers;
                   }
                   return null;
                 },
               ),
               TextFormField(
                 initialValue: _maxSpeed.toString(),
-                decoration: InputDecoration(labelText: 'Max Speed'),
+                decoration: InputDecoration(labelText: S.of(context).maxSpeed),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _maxSpeed = double.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter max speed';
+                    return S.of(context).maxSpeed;
                   }
                   return null;
                 },
               ),
               TextFormField(
                 initialValue: _range.toString(),
-                decoration: InputDecoration(labelText: 'Range'),
+                decoration: InputDecoration(labelText: S.of(context).range),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _range = double.parse(value!),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter range';
+                    return S.of(context).range;
                   }
                   return null;
                 },
@@ -92,69 +121,18 @@ class _AirplaneDetailPageState extends State<AirplaneDetailPage> {
                 children: [
                   ElevatedButton(
                     onPressed: _updateAirplane,
-                    child: Text('Update'),
+                    child: Text(S.of(context).update),
                   ),
                   ElevatedButton(
                     onPressed: _deleteAirplane,
-                    child: Text('Delete'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
+                    child: Text(S.of(context).delete),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ],
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _updateAirplane() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      _databaseHelper.updateAirplane(
-        Airplane(
-          id: widget.airplane.id,
-          type: _type,
-          numberOfPassengers: _numberOfPassengers,
-          maxSpeed: _maxSpeed,
-          range: _range,
-        ),
-      ).then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Airplane updated successfully')),
-        );
-        Navigator.pop(context, true);
-      });
-    }
-  }
-
-  void _deleteAirplane() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Delete Airplane'),
-        content: Text('Are you sure you want to delete this airplane?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              _databaseHelper.deleteAirplane(widget.airplane.id!).then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Airplane deleted successfully')),
-                );
-                Navigator.pop(context, true);
-              });
-            },
-            child: Text('Delete'),
-          ),
-        ],
       ),
     );
   }

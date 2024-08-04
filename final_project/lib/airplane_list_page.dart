@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
+import 'generated/l10n.dart';
 import 'add_airplane_page.dart';
 import 'airplane_detail_page.dart';
 
@@ -20,7 +21,6 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
 
   Future<void> _loadAirplanes() async {
     List<Airplane> airplanes = await _databaseHelper.getAirplanes();
-    print('Loaded Airplanes: $airplanes'); // Debugging statement
     setState(() {
       _airplanes = airplanes;
     });
@@ -30,72 +30,44 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Airplane List'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.info),
-            onPressed: _showInstructions,
-          ),
-        ],
+        title: Text(S.of(context).airplaneList),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: _airplanes.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_airplanes[index].type),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AirplaneDetailPage(airplane: _airplanes[index]),
-                      ),
-                    ).then((_) {
-                      _loadAirplanes();
-                    });
-                  },
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddAirplanePage()),
-                ).then((_) {
-                  _loadAirplanes();
-                });
-              },
-              child: Text('Add Airplane'),
-            ),
-          ),
-        ],
+      body: _airplanes.isEmpty
+          ? Center(child: Text('No airplanes found'))
+          : ListView.builder(
+        itemCount: _airplanes.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_airplanes[index].type),
+            subtitle: Text('${_airplanes[index].numberOfPassengers} passengers'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AirplaneDetailPage(airplane: _airplanes[index]),
+                ),
+              ).then((value) {
+                if (value == true) {
+                  _loadAirplanes(); // Reload the list after updating or deleting an airplane
+                }
+              });
+            },
+          );
+        },
       ),
-    );
-  }
-
-  void _showInstructions() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Instructions'),
-          content: Text('Instructions on how to use the interface.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddAirplanePage()),
+          ).then((value) {
+            if (value == true) {
+              _loadAirplanes(); // Reload the list after adding a new airplane
+            }
+          });
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
