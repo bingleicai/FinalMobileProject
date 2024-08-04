@@ -39,7 +39,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(_airplanes[index].type),
-            subtitle: Text('${_airplanes[index].numberOfPassengers} passengers'),
+            subtitle: Text(S.of(context).passengers(_airplanes[index].numberOfPassengers.toString())),
             onTap: () {
               Navigator.push(
                 context,
