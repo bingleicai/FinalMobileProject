@@ -67,7 +67,7 @@ class _ReservationFormPageState extends State<ReservationFormPage> {
       );
       bool isNew = widget.reservation == null;
       if (isNew) {
-        await _databaseHelper.insertReservation(reservation.toJson());
+        await _databaseHelper.insertReservation(reservation.toJsonWithoutId());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(S.of(context).reservationAdded)),
         );

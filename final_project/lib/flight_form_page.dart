@@ -59,7 +59,7 @@ class _FlightFormPageState extends State<FlightFormPage> {
       );
       bool isNew = widget.flight == null;
       if (isNew) {
-        await _databaseHelper.insertFlight(flight.toJson());
+        await _databaseHelper.insertFlight(flight.toJsonWithoutId());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(S.of(context).flightAdded)),
         );

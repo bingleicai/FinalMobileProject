@@ -36,4 +36,15 @@ class Flight {
       'airplaneId': airplaneId,
     };
   }
+
+  // Method to get a map excluding the id field
+  Map<String, dynamic> toJsonWithoutId() {
+    return {
+      'departureCity': departureCity,
+      'destinationCity': destinationCity,
+      'departureTime': departureTime,
+      'arrivalTime': arrivalTime,
+      'airplaneId': airplaneId,
+    };
+  }
 }

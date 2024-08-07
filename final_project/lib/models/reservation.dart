@@ -28,4 +28,12 @@ class Reservation {
       'reservationName': reservationName,
     };
   }
+
+  Map<String, dynamic> toJsonWithoutId() {
+    return {
+      'customerId': customerId,
+      'flightId': flightId,
+      'reservationName': reservationName,
+    };
+  }
 }

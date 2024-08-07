@@ -62,7 +62,7 @@
   "addCustomer": "添加客户",
   "editCustomer": "编辑客户",
   "firstName": "名字",
-  "lastName": "L姓氏",
+  "lastName": "姓氏",
   "address": "地址",
   "birthday": "生日",
   "customers": "客户",

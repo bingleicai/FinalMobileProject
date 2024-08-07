@@ -81,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "flights": MessageLookupByLibrary.simpleMessage("航班"),
         "goToFlightList": MessageLookupByLibrary.simpleMessage("转到航班列表"),
         "invalidDateFormat": MessageLookupByLibrary.simpleMessage("无效的日期格式"),
-        "lastName": MessageLookupByLibrary.simpleMessage("L姓氏"),
+        "lastName": MessageLookupByLibrary.simpleMessage("姓氏"),
         "maxSpeed": MessageLookupByLibrary.simpleMessage("最大速度"),
         "newFields": MessageLookupByLibrary.simpleMessage("新字段"),
         "noAirplanesFound": MessageLookupByLibrary.simpleMessage("未找到飞机"),
