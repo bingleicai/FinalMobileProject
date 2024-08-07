@@ -75,8 +75,8 @@ class _CustomerFormPageState extends State<CustomerFormPage> {
     }
   }
 
-  Future<void> _showAlertDialog(String title, String message) async {
-    return showDialog<void>(
+  Future<bool?> _showAlertDialog(String title, String message) async {
+    return showDialog<bool?>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -84,11 +84,17 @@ class _CustomerFormPageState extends State<CustomerFormPage> {
           content: Text(message),
           actions: [
             TextButton(
-              child: Text(S.of(context).ok),
+              child: Text(S.of(context).cancel),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
+            TextButton(
+                child: Text(S.of(context).confirm),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                }
+            )
           ],
         );
       },
@@ -181,9 +187,21 @@ class _CustomerFormPageState extends State<CustomerFormPage> {
                   if (widget.customer != null) ...[
                     SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: _deleteCustomer,
                       child: Text(S.of(context).delete),
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      onPressed: () async {
+                        final confirmed = await _showAlertDialog(
+                          S
+                              .of(context)
+                              .deleteFlight,
+                          S
+                              .of(context)
+                              .confirmDelete,
+                        );
+                        if (confirmed == true) {
+                          await _deleteCustomer();
+                        }
+                      }
                     ),
                   ],
                 ],
