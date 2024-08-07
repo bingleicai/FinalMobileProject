@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'airplane_list_page.dart';
-import 'generated/l10n.dart';
+import 'generated/l10n.dart'; // Correct import for localization
+import 'airplane_list_page.dart'; // Ensure the import path is correct
+import 'flight_list_page.dart'; // Ensure the import path is correct
 
 class MainPage extends StatefulWidget {
   final void Function(Locale) setLocale;
@@ -61,7 +62,15 @@ class _MainPageState extends State<MainPage> {
               },
               child: Text(S.of(context).airplaneList),
             ),
-            // Add other buttons for different parts of the project
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FlightListPage()),
+                );
+              },
+              child: Text(S.of(context).flightList),
+            ),
           ],
         ),
       ),

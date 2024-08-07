@@ -33,14 +33,20 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
       _isAddingAirplane = true;
       _selectedAirplane = null;
     });
+
     if (MediaQuery.of(context).size.width <= 600) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AirplaneFormPage(airplane: null),
+          builder: (context) => AirplaneFormPage(
+            airplane: null,
+            onSave: _handleFormSave,
+          ),
         ),
       ).then((value) {
-        _loadAirplanes();
+        if (value == true) {
+          _loadAirplanes();
+        }
       });
     }
   }
@@ -50,16 +56,30 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
       _isAddingAirplane = false;
       _selectedAirplane = airplane;
     });
+
     if (MediaQuery.of(context).size.width <= 600) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AirplaneFormPage(airplane: airplane),
+          builder: (context) => AirplaneFormPage(
+            airplane: airplane,
+            onSave: _handleFormSave,
+          ),
         ),
       ).then((value) {
-        _loadAirplanes();
+        if (value == true) {
+          _loadAirplanes();
+        }
       });
     }
+  }
+
+  void _handleFormSave() {
+    _loadAirplanes();
+    setState(() {
+      _isAddingAirplane = false;
+      _selectedAirplane = null;
+    });
   }
 
   @override
@@ -67,6 +87,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
+          // Tablet/Desktop Layout
           return Row(
             children: [
               Expanded(
@@ -87,7 +108,10 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
                               title: Text(_airplanes[index].type),
                               subtitle: Text(S.of(context).passengers(_airplanes[index].numberOfPassengers)),
                               onTap: () {
-                                _navigateToEditAirplane(_airplanes[index]);
+                                setState(() {
+                                  _selectedAirplane = _airplanes[index];
+                                  _isAddingAirplane = false;
+                                });
                               },
                             );
                           },
@@ -107,7 +131,10 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
               Expanded(
                 flex: 3,
                 child: _isAddingAirplane || _selectedAirplane != null
-                    ? AirplaneFormPage(airplane: _selectedAirplane)
+                    ? AirplaneFormPage(
+                  airplane: _selectedAirplane,
+                  onSave: _handleFormSave,
+                )
                     : Container(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   child: Center(
@@ -124,6 +151,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
             ],
           );
         } else {
+          // Phone Layout
           return Scaffold(
             appBar: AppBar(
               title: Text(S.of(context).airplaneList),

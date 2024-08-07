@@ -5,8 +5,9 @@ import 'generated/l10n.dart';
 
 class AirplaneFormPage extends StatefulWidget {
   final Airplane? airplane;
+  final VoidCallback onSave;
 
-  AirplaneFormPage({this.airplane});
+  AirplaneFormPage({this.airplane, required this.onSave});
 
   @override
   _AirplaneFormPageState createState() => _AirplaneFormPageState();
@@ -23,12 +24,10 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.airplane != null) {
-      _type = widget.airplane!.type;
-      _numberOfPassengers = widget.airplane!.numberOfPassengers;
-      _maxSpeed = widget.airplane!.maxSpeed;
-      _range = widget.airplane!.range;
-    }
+    _type = widget.airplane?.type ?? '';
+    _numberOfPassengers = widget.airplane?.numberOfPassengers ?? 0;
+    _maxSpeed = widget.airplane?.maxSpeed ?? 0.0;
+    _range = widget.airplane?.range ?? 0.0;
   }
 
   Future<void> _saveAirplane() async {
@@ -46,7 +45,8 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
       } else {
         await _databaseHelper.updateAirplane(airplane);
       }
-      Navigator.pop(context, true);
+      widget.onSave();
+      Navigator.pop(context, true);  // Ensures the page pops after save
     } else {
       _showAlertDialog(S.of(context).error, S.of(context).fillAllFields);
     }
@@ -55,7 +55,8 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
   Future<void> _deleteAirplane() async {
     if (widget.airplane != null) {
       await _databaseHelper.deleteAirplane(widget.airplane!.id!);
-      Navigator.pop(context, true);
+      widget.onSave();
+      Navigator.pop(context, true);  // Ensures the page pops after delete
     }
   }
 
@@ -83,7 +84,7 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.airplane == null ? S.of(context).addAirplane : S.of(context).airplaneType),
+        title: Text(widget.airplane == null ? S.of(context).addAirplane : S.of(context).update),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -92,27 +93,27 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
           child: Column(
             children: [
               TextFormField(
-                initialValue: widget.airplane?.type ?? '',
+                initialValue: _type,
                 decoration: InputDecoration(labelText: S.of(context).airplaneType),
                 onSaved: (value) => _type = value!,
                 validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
               ),
               TextFormField(
-                initialValue: widget.airplane?.numberOfPassengers.toString() ?? '',
+                initialValue: _numberOfPassengers.toString(),
                 decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _numberOfPassengers = int.parse(value!),
                 validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
               ),
               TextFormField(
-                initialValue: widget.airplane?.maxSpeed.toString() ?? '',
+                initialValue: _maxSpeed.toString(),
                 decoration: InputDecoration(labelText: S.of(context).maxSpeed),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _maxSpeed = double.parse(value!),
                 validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
               ),
               TextFormField(
-                initialValue: widget.airplane?.range.toString() ?? '',
+                initialValue: _range.toString(),
                 decoration: InputDecoration(labelText: S.of(context).range),
                 keyboardType: TextInputType.number,
                 onSaved: (value) => _range = double.parse(value!),

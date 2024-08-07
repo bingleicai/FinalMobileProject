@@ -1,8 +1,8 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:path/path.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'models/airplane.dart';  // Import the Airplane class
 
 class DatabaseHelper {
@@ -27,7 +27,7 @@ class DatabaseHelper {
       databaseFactory = databaseFactoryFfi;
     }
 
-    String path = join(await getDatabasesPath(), 'airplanes.db');
+    String path = join(await getDatabasesPath(), 'flights_airplanes.db');
     return await openDatabase(
       path,
       version: 1,
@@ -45,8 +45,21 @@ class DatabaseHelper {
         range REAL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE flights (
+        id INTEGER PRIMARY KEY,
+        departureCity TEXT,
+        destinationCity TEXT,
+        departureTime TEXT,
+        arrivalTime TEXT,
+        airplaneId INTEGER,
+        FOREIGN KEY(airplaneId) REFERENCES airplanes(id)
+      )
+    ''');
   }
 
+  // Airplanes methods
   Future<List<Airplane>> getAirplanes() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('airplanes');
@@ -82,5 +95,55 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // Flights methods
+  Future<int> insertFlight(Map<String, dynamic> flight) async {
+    try {
+      final db = await database;
+      return await db.insert('flights', flight);
+    } catch (e) {
+      print('Error inserting flight: $e');
+      return -1;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getFlights() async {
+    try {
+      final db = await database;
+      return await db.query('flights');
+    } catch (e) {
+      print('Error fetching flights: $e');
+      return [];
+    }
+  }
+
+  Future<int> updateFlight(Map<String, dynamic> flight) async {
+    try {
+      final db = await database;
+      return await db.update(
+        'flights',
+        flight,
+        where: 'id = ?',
+        whereArgs: [flight['id']],
+      );
+    } catch (e) {
+      print('Error updating flight: $e');
+      return -1;
+    }
+  }
+
+  Future<int> deleteFlight(int id) async {
+    try {
+      final db = await database;
+      return await db.delete(
+        'flights',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      print('Error deleting flight: $e');
+      return -1;
+    }
   }
 }
