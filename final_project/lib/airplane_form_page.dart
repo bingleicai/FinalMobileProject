@@ -6,8 +6,9 @@ import 'generated/l10n.dart';
 class AirplaneFormPage extends StatefulWidget {
   final Airplane? airplane;
   final VoidCallback onSave;
+  final VoidCallback onCancel;  // Add onCancel callback to handle back navigation
 
-  AirplaneFormPage({this.airplane, required this.onSave});
+  AirplaneFormPage({this.airplane, required this.onSave, required this.onCancel});
 
   @override
   _AirplaneFormPageState createState() => _AirplaneFormPageState();
@@ -46,7 +47,9 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
         await _databaseHelper.updateAirplane(airplane);
       }
       widget.onSave();
-      Navigator.pop(context, true);  // Ensures the page pops after save
+      if (MediaQuery.of(context).size.width <= 600) {
+        Navigator.pop(context, true);  // Ensures the page pops after save on small screens
+      }
     } else {
       _showAlertDialog(S.of(context).error, S.of(context).fillAllFields);
     }
@@ -56,7 +59,9 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
     if (widget.airplane != null) {
       await _databaseHelper.deleteAirplane(widget.airplane!.id!);
       widget.onSave();
-      Navigator.pop(context, true);  // Ensures the page pops after delete
+      if (MediaQuery.of(context).size.width <= 600) {
+        Navigator.pop(context, true);  // Ensures the page pops after delete on small screens
+      }
     }
   }
 
@@ -82,44 +87,73 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.airplane == null ? S.of(context).addAirplane : S.of(context).update),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+    return WillPopScope(
+      onWillPop: () async {
+        if (MediaQuery.of(context).size.width > 600) {
+          widget.onCancel();
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.airplane == null ? S.of(context).addAirplane : S.of(context).update),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              if (MediaQuery.of(context).size.width > 600) {
+                widget.onCancel();
+              } else {
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextFormField(
-                initialValue: _type,
-                decoration: InputDecoration(labelText: S.of(context).airplaneType),
-                onSaved: (value) => _type = value!,
-                validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          initialValue: _type,
+                          decoration: InputDecoration(labelText: S.of(context).airplaneType),
+                          onSaved: (value) => _type = value!,
+                          validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
+                        ),
+                        TextFormField(
+                          initialValue: _numberOfPassengers.toString(),
+                          decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => _numberOfPassengers = int.parse(value!),
+                          validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
+                        ),
+                        TextFormField(
+                          initialValue: _maxSpeed.toString(),
+                          decoration: InputDecoration(labelText: S.of(context).maxSpeed),
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => _maxSpeed = double.parse(value!),
+                          validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
+                        ),
+                        TextFormField(
+                          initialValue: _range.toString(),
+                          decoration: InputDecoration(labelText: S.of(context).range),
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => _range = double.parse(value!),
+                          validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
+                        ),
+                        SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              TextFormField(
-                initialValue: _numberOfPassengers.toString(),
-                decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
-                keyboardType: TextInputType.number,
-                onSaved: (value) => _numberOfPassengers = int.parse(value!),
-                validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
-              ),
-              TextFormField(
-                initialValue: _maxSpeed.toString(),
-                decoration: InputDecoration(labelText: S.of(context).maxSpeed),
-                keyboardType: TextInputType.number,
-                onSaved: (value) => _maxSpeed = double.parse(value!),
-                validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
-              ),
-              TextFormField(
-                initialValue: _range.toString(),
-                decoration: InputDecoration(labelText: S.of(context).range),
-                keyboardType: TextInputType.number,
-                onSaved: (value) => _range = double.parse(value!),
-                validator: (value) => value!.isEmpty ? S.of(context).fillAllFields : null,
-              ),
-              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
