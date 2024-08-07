@@ -749,6 +749,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Flight added successfully.`
+  String get flightAdded {
+    return Intl.message(
+      'Flight added successfully.',
+      name: 'flightAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flight edited successfully.`
+  String get flightEdited {
+    return Intl.message(
+      'Flight edited successfully.',
+      name: 'flightEdited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flight deleted successfully.`
+  String get flightDeleted {
+    return Intl.message(
+      'Flight deleted successfully.',
+      name: 'flightDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flights`
+  String get flights {
+    return Intl.message(
+      'Flights',
+      name: 'flights',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Flight`
+  String get deleteFlight {
+    return Intl.message(
+      'Delete Flight',
+      name: 'deleteFlight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flight updated successfully.`
+  String get flightUpdated {
+    return Intl.message(
+      'Flight updated successfully.',
+      name: 'flightUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Flight`
+  String get editFlight {
+    return Intl.message(
+      'Edit Flight',
+      name: 'editFlight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Airplane`
+  String get selectAirplane {
+    return Intl.message(
+      'Select Airplane',
+      name: 'selectAirplane',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Reservation Found.`
+  String get noReservationsFound {
+    return Intl.message(
+      'No Reservation Found.',
+      name: 'noReservationsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation added successfully.`
+  String get reservationAdded {
+    return Intl.message(
+      'Reservation added successfully.',
+      name: 'reservationAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation updated successfully.`
+  String get reservationUpdated {
+    return Intl.message(
+      'Reservation updated successfully.',
+      name: 'reservationUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation deleted successfully.`
+  String get reservationDeleted {
+    return Intl.message(
+      'Reservation deleted successfully.',
+      name: 'reservationDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation`
+  String get reservations {
+    return Intl.message(
+      'Reservation',
+      name: 'reservations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Reservation`
+  String get deleteReservation {
+    return Intl.message(
+      'Delete Reservation',
+      name: 'deleteReservation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Reservation`
+  String get addReservation {
+    return Intl.message(
+      'Add Reservation',
+      name: 'addReservation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Reservation`
+  String get editReservation {
+    return Intl.message(
+      'Edit Reservation',
+      name: 'editReservation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation Name`
+  String get reservationName {
+    return Intl.message(
+      'Reservation Name',
+      name: 'reservationName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Flight`
+  String get selectFlight {
+    return Intl.message(
+      'Select Flight',
+      name: 'selectFlight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reservation List`
+  String get reservationList {
+    return Intl.message(
+      'Reservation List',
+      name: 'reservationList',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

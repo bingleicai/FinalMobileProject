@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'models/airplane.dart';  // Import the Airplane class
 import 'models/customer.dart';  // Import the Customer class
+import 'models/flight.dart';    // Import the Flight class
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -31,7 +32,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'flights_airplanes.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -69,6 +70,17 @@ class DatabaseHelper {
         birthday TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE reservations (
+        id INTEGER PRIMARY KEY,
+        customerId INTEGER,
+        flightId INTEGER,
+        reservationName TEXT,
+        FOREIGN KEY(customerId) REFERENCES customers(id),
+        FOREIGN KEY(flightId) REFERENCES flights(id)
+      )
+    ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -80,6 +92,18 @@ class DatabaseHelper {
           lastName TEXT,
           address TEXT,
           birthday TEXT
+        )
+      ''');
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE reservations (
+          id INTEGER PRIMARY KEY,
+          customerId INTEGER,
+          flightId INTEGER,
+          reservationName TEXT,
+          FOREIGN KEY(customerId) REFERENCES customers(id),
+          FOREIGN KEY(flightId) REFERENCES flights(id)
         )
       ''');
     }
@@ -209,5 +233,55 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // Reservations methods
+  Future<int> insertReservation(Map<String, dynamic> reservation) async {
+    try {
+      final db = await database;
+      return await db.insert('reservations', reservation);
+    } catch (e) {
+      print('Error inserting reservation: $e');
+      return -1;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getReservations() async {
+    try {
+      final db = await database;
+      return await db.query('reservations');
+    } catch (e) {
+      print('Error fetching reservations: $e');
+      return [];
+    }
+  }
+
+  Future<int> updateReservation(Map<String, dynamic> reservation) async {
+    try {
+      final db = await database;
+      return await db.update(
+        'reservations',
+        reservation,
+        where: 'id = ?',
+        whereArgs: [reservation['id']],
+      );
+    } catch (e) {
+      print('Error updating reservation: $e');
+      return -1;
+    }
+  }
+
+  Future<int> deleteReservation(int id) async {
+    try {
+      final db = await database;
+      return await db.delete(
+        'reservations',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      print('Error deleting reservation: $e');
+      return -1;
+    }
   }
 }

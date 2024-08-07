@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "addFlight": MessageLookupByLibrary.simpleMessage("Add Flight"),
         "addNewCustomer":
             MessageLookupByLibrary.simpleMessage("Add New Customer"),
+        "addReservation":
+            MessageLookupByLibrary.simpleMessage("Add Reservation"),
         "address": MessageLookupByLibrary.simpleMessage("Address"),
         "airplaneAdded":
             MessageLookupByLibrary.simpleMessage("Airplane added successfully"),
@@ -72,6 +74,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete Airplane"),
         "deleteCustomer":
             MessageLookupByLibrary.simpleMessage("Delete Customer"),
+        "deleteFlight": MessageLookupByLibrary.simpleMessage("Delete Flight"),
+        "deleteReservation":
+            MessageLookupByLibrary.simpleMessage("Delete Reservation"),
         "departureCity": MessageLookupByLibrary.simpleMessage("Departure City"),
         "departureTime": MessageLookupByLibrary.simpleMessage("Departure Time"),
         "destinationCity":
@@ -79,13 +84,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editAirplane": MessageLookupByLibrary.simpleMessage("Edit Airplane"),
         "editCustomer": MessageLookupByLibrary.simpleMessage("Edit Customer"),
+        "editFlight": MessageLookupByLibrary.simpleMessage("Edit Flight"),
+        "editReservation":
+            MessageLookupByLibrary.simpleMessage("Edit Reservation"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "fieldRequired": MessageLookupByLibrary.simpleMessage("Field Required"),
         "fillAllFields":
             MessageLookupByLibrary.simpleMessage("Please fill all fields"),
         "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
+        "flightAdded":
+            MessageLookupByLibrary.simpleMessage("Flight added successfully."),
+        "flightDeleted": MessageLookupByLibrary.simpleMessage(
+            "Flight deleted successfully."),
         "flightDetails": MessageLookupByLibrary.simpleMessage("Flight Details"),
+        "flightEdited":
+            MessageLookupByLibrary.simpleMessage("Flight edited successfully."),
         "flightList": MessageLookupByLibrary.simpleMessage("Flight List"),
+        "flightUpdated": MessageLookupByLibrary.simpleMessage(
+            "Flight updated successfully."),
+        "flights": MessageLookupByLibrary.simpleMessage("Flights"),
         "goToFlightList":
             MessageLookupByLibrary.simpleMessage("Go to Flight List"),
         "invalidDateFormat":
@@ -99,6 +116,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No customers found"),
         "noFlightsFound":
             MessageLookupByLibrary.simpleMessage("No flights found"),
+        "noReservationsFound":
+            MessageLookupByLibrary.simpleMessage("No Reservation Found."),
         "numberOfPassengers":
             MessageLookupByLibrary.simpleMessage("Number of Passengers"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
@@ -116,11 +135,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "range": MessageLookupByLibrary.simpleMessage("Range"),
         "requiredField":
             MessageLookupByLibrary.simpleMessage("This field is required."),
+        "reservationAdded": MessageLookupByLibrary.simpleMessage(
+            "Reservation added successfully."),
+        "reservationDeleted": MessageLookupByLibrary.simpleMessage(
+            "Reservation deleted successfully."),
+        "reservationList":
+            MessageLookupByLibrary.simpleMessage("Reservation List"),
+        "reservationName":
+            MessageLookupByLibrary.simpleMessage("Reservation Name"),
+        "reservationUpdated": MessageLookupByLibrary.simpleMessage(
+            "Reservation updated successfully."),
+        "reservations": MessageLookupByLibrary.simpleMessage("Reservation"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "selectAirplane":
+            MessageLookupByLibrary.simpleMessage("Select Airplane"),
         "selectAirplaneDetails": MessageLookupByLibrary.simpleMessage(
             "Select an airplane to view details"),
         "selectCustomer": MessageLookupByLibrary.simpleMessage(
             "Please select a customer from the list."),
+        "selectFlight": MessageLookupByLibrary.simpleMessage("Select Flight"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "updateFlight": MessageLookupByLibrary.simpleMessage("Update Flight")

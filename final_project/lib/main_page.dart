@@ -3,6 +3,7 @@ import 'generated/l10n.dart'; // Correct import for localization
 import 'airplane_list_page.dart'; // Ensure the import path is correct
 import 'flight_list_page.dart'; // Ensure the import path is correct
 import 'customer_list_page.dart'; // Import the CustomerListPage
+import 'reservation_list_page.dart'; // Import the ReservationListPage
 
 class MainPage extends StatefulWidget {
   final void Function(Locale) setLocale;
@@ -80,6 +81,15 @@ class _MainPageState extends State<MainPage> {
                 );
               },
               child: Text(S.of(context).customerList),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReservationListPage()),
+                );
+              },
+              child: Text(S.of(context).reservationList),
             ),
           ],
         ),
