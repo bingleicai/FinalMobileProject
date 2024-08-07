@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'models/airplane.dart';  // Import the Airplane class
+import 'models/customer.dart';  // Import the Customer class
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -30,8 +31,9 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'flights_airplanes.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -57,6 +59,30 @@ class DatabaseHelper {
         FOREIGN KEY(airplaneId) REFERENCES airplanes(id)
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE customers (
+        id INTEGER PRIMARY KEY,
+        firstName TEXT,
+        lastName TEXT,
+        address TEXT,
+        birthday TEXT
+      )
+    ''');
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+        CREATE TABLE customers (
+          id INTEGER PRIMARY KEY,
+          firstName TEXT,
+          lastName TEXT,
+          address TEXT,
+          birthday TEXT
+        )
+      ''');
+    }
   }
 
   // Airplanes methods
@@ -145,5 +171,43 @@ class DatabaseHelper {
       print('Error deleting flight: $e');
       return -1;
     }
+  }
+
+  // Customers methods
+  Future<List<Customer>> getCustomers() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('customers');
+
+    return List.generate(maps.length, (i) {
+      return Customer.fromMap(maps[i]);
+    });
+  }
+
+  Future<void> insertCustomer(Customer customer) async {
+    final db = await database;
+    await db.insert(
+      'customers',
+      customer.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateCustomer(Customer customer) async {
+    final db = await database;
+    await db.update(
+      'customers',
+      customer.toMap(),
+      where: 'id = ?',
+      whereArgs: [customer.id],
+    );
+  }
+
+  Future<void> deleteCustomer(int id) async {
+    final db = await database;
+    await db.delete(
+      'customers',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

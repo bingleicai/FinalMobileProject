@@ -1,88 +1,86 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
 import 'generated/l10n.dart';
-import 'airplane_form_page.dart';
-import 'models/airplane.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';  // Import the secure storage package
+import 'customer_form_page.dart';
+import 'models/customer.dart';
 
-class AirplaneListPage extends StatefulWidget {
+class CustomerListPage extends StatefulWidget {
   @override
-  _AirplaneListPageState createState() => _AirplaneListPageState();
+  _CustomerListPageState createState() => _CustomerListPageState();
 }
 
-class _AirplaneListPageState extends State<AirplaneListPage> {
-  List<Airplane> _airplanes = [];
-  Airplane? _selectedAirplane;
-  bool _isAddingAirplane = false;
+class _CustomerListPageState extends State<CustomerListPage> {
+  List<Customer> _customers = [];
+  Customer? _selectedCustomer;
+  bool _isAddingCustomer = false;
   DatabaseHelper _databaseHelper = DatabaseHelper();
-  final _storage = FlutterSecureStorage();  // Instance of the secure storage
 
   @override
   void initState() {
     super.initState();
-    _loadAirplanes();
+    _loadCustomers();
   }
 
-  Future<void> _loadAirplanes() async {
-    List<Airplane> airplanes = await _databaseHelper.getAirplanes();
+  Future<void> _loadCustomers() async {
+    List<Customer> customers = await _databaseHelper.getCustomers();
     setState(() {
-      _airplanes = airplanes;
+      _customers = customers;
     });
-    if (_airplanes.isEmpty) {
+    if (_customers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).noAirplanesFound)),
+        SnackBar(content: Text(S.of(context).noCustomersFound)),
       );
     }
   }
 
-  void _navigateToAddAirplane() {
+  void _navigateToAddCustomer() {
     if (MediaQuery.of(context).size.width > 600) {
       setState(() {
-        _isAddingAirplane = true;
-        _selectedAirplane = null;
+        _isAddingCustomer = true;
+        _selectedCustomer = null;
       });
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AirplaneFormPage(
-            airplane: null,
+          builder: (context) => CustomerFormPage(
+            customer: null,
             onSave: _handleFormSave,
             onCancel: _handleFormCancel,
           ),
         ),
       ).then((value) {
         if (value == true) {
-          _loadAirplanes();
+          _loadCustomers();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).airplaneAdded)),
+            SnackBar(content: Text(S.of(context).customerAdded)),
           );
         }
       });
     }
   }
 
-  void _navigateToEditAirplane(Airplane airplane) {
+  void _navigateToEditCustomer(Customer customer) {
     if (MediaQuery.of(context).size.width > 600) {
       setState(() {
-        _isAddingAirplane = false;
-        _selectedAirplane = airplane;
+        _isAddingCustomer = false;
+        _selectedCustomer = customer;
       });
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AirplaneFormPage(
-            airplane: airplane,
+          builder: (context) => CustomerFormPage(
+            customer: customer,
             onSave: _handleFormSave,
             onCancel: _handleFormCancel,
           ),
         ),
       ).then((value) {
         if (value == true) {
-          _loadAirplanes();
+          _loadCustomers();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(S.of(context).airplaneEdited)),
+            SnackBar(content: Text(S.of(context).customerEdited)),
           );
         }
       });
@@ -90,25 +88,25 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
   }
 
   void _handleFormSave() {
-    _loadAirplanes();
+    _loadCustomers();
     setState(() {
-      _isAddingAirplane = false;
-      _selectedAirplane = null;
+      _isAddingCustomer = false;
+      _selectedCustomer = null;
     });
   }
 
   void _handleFormCancel() {
     setState(() {
-      _isAddingAirplane = false;
-      _selectedAirplane = null;
+      _isAddingCustomer = false;
+      _selectedCustomer = null;
     });
   }
 
-  Future<void> _handleAirplaneDelete(Airplane airplane) async {
-    await _databaseHelper.deleteAirplane(airplane.id!);
-    _loadAirplanes();
+  Future<void> _handleCustomerDelete(Customer customer) async {
+    await _databaseHelper.deleteCustomer(customer.id!);
+    _loadCustomers();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(S.of(context).airplaneDeleted)),
+      SnackBar(content: Text(S.of(context).customerDeleted)),
     );
   }
 
@@ -120,29 +118,28 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
           // Tablet/Desktop Layout
           return Scaffold(
             appBar: AppBar(
-              title: Text(S.of(context).airplanes),
+              title: Text(S.of(context).customers),
             ),
             body: Row(
               children: [
                 Expanded(
                   flex: 2,
                   child: ListView.builder(
-                    itemCount: _airplanes.length,
+                    itemCount: _customers.length,
                     itemBuilder: (context, index) {
-                      final airplane = _airplanes[index];
+                      final customer = _customers[index];
                       return ListTile(
-                        title: Text(airplane.type),
-                        subtitle: Text('${airplane.numberOfPassengers} ${S.of(context).passengers}'),
-                        onTap: () => _navigateToEditAirplane(airplane),
+                        title: Text('${customer.firstName} ${customer.lastName}'),
+                        onTap: () => _navigateToEditCustomer(customer),
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () async {
                             final confirmed = await _showAlertDialog(
-                              S.of(context).deleteAirplane,
+                              S.of(context).deleteCustomer,
                               S.of(context).confirmDelete,
                             );
                             if (confirmed == true) {
-                              _handleAirplaneDelete(airplane);
+                              _handleCustomerDelete(customer);
                             }
                           },
                         ),
@@ -150,11 +147,11 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
                     },
                   ),
                 ),
-                if (_isAddingAirplane || _selectedAirplane != null)
+                if (_isAddingCustomer || _selectedCustomer != null)
                   Expanded(
                     flex: 3,
-                    child: AirplaneFormPage(
-                      airplane: _selectedAirplane,
+                    child: CustomerFormPage(
+                      customer: _selectedCustomer,
                       onSave: _handleFormSave,
                       onCancel: _handleFormCancel,
                     ),
@@ -162,7 +159,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: _navigateToAddAirplane,
+              onPressed: _navigateToAddCustomer,
               child: Icon(Icons.add),
             ),
           );
@@ -170,25 +167,24 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
           // Mobile Layout
           return Scaffold(
             appBar: AppBar(
-              title: Text(S.of(context).airplanes),
+              title: Text(S.of(context).customers),
             ),
             body: ListView.builder(
-              itemCount: _airplanes.length,
+              itemCount: _customers.length,
               itemBuilder: (context, index) {
-                final airplane = _airplanes[index];
+                final customer = _customers[index];
                 return ListTile(
-                  title: Text(airplane.type),
-                  subtitle: Text('${airplane.numberOfPassengers} passengers'),
-                  onTap: () => _navigateToEditAirplane(airplane),
+                  title: Text('${customer.firstName} ${customer.lastName}'),
+                  onTap: () => _navigateToEditCustomer(customer),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () async {
                       final confirmed = await _showAlertDialog(
-                        S.of(context).deleteAirplane,
+                        S.of(context).deleteCustomer,
                         S.of(context).confirmDelete,
                       );
                       if (confirmed == true) {
-                        _handleAirplaneDelete(airplane);
+                        _handleCustomerDelete(customer);
                       }
                     },
                   ),
@@ -196,7 +192,7 @@ class _AirplaneListPageState extends State<AirplaneListPage> {
               },
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: _navigateToAddAirplane,
+              onPressed: _navigateToAddCustomer,
               child: Icon(Icons.add),
             ),
           );

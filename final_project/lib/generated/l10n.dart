@@ -100,13 +100,13 @@ class S {
     );
   }
 
-  /// `{count} Passengers`
-  String passengers(Object count) {
+  /// `passengers`
+  String get passengers {
     return Intl.message(
-      '$count Passengers',
+      'passengers',
       name: 'passengers',
       desc: '',
-      args: [count],
+      args: [],
     );
   }
 
@@ -345,6 +345,406 @@ class S {
     return Intl.message(
       'No flights found',
       name: 'noFlightsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Actions`
+  String get actions {
+    return Intl.message(
+      'Actions',
+      name: 'actions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose an action`
+  String get chooseAction {
+    return Intl.message(
+      'Choose an action',
+      name: 'chooseAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Delete`
+  String get confirmDelete {
+    return Intl.message(
+      'Confirm Delete',
+      name: 'confirmDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this record?`
+  String get areYouSureDelete {
+    return Intl.message(
+      'Are you sure you want to delete this record?',
+      name: 'areYouSureDelete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy Fields`
+  String get copyFields {
+    return Intl.message(
+      'Copy Fields',
+      name: 'copyFields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Customer`
+  String get addNewCustomer {
+    return Intl.message(
+      'Add New Customer',
+      name: 'addNewCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Fields`
+  String get newFields {
+    return Intl.message(
+      'New Fields',
+      name: 'newFields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get edit {
+    return Intl.message(
+      'Edit',
+      name: 'edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy Fields or Add New`
+  String get copyFieldsOrNew {
+    return Intl.message(
+      'Copy Fields or Add New',
+      name: 'copyFieldsOrNew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer List`
+  String get customerList {
+    return Intl.message(
+      'Customer List',
+      name: 'customerList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No customers found`
+  String get noCustomersFound {
+    return Intl.message(
+      'No customers found',
+      name: 'noCustomersFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a customer from the list.`
+  String get selectCustomer {
+    return Intl.message(
+      'Please select a customer from the list.',
+      name: 'selectCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplane saved successfully.`
+  String get airplaneSaved {
+    return Intl.message(
+      'Airplane saved successfully.',
+      name: 'airplaneSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplane deleted successfully.`
+  String get airplaneDeleted {
+    return Intl.message(
+      'Airplane deleted successfully.',
+      name: 'airplaneDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Airplane`
+  String get editAirplane {
+    return Intl.message(
+      'Edit Airplane',
+      name: 'editAirplane',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get type {
+    return Intl.message(
+      'Type',
+      name: 'type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is required.`
+  String get requiredField {
+    return Intl.message(
+      'This field is required.',
+      name: 'requiredField',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Airplane`
+  String get deleteAirplane {
+    return Intl.message(
+      'Delete Airplane',
+      name: 'deleteAirplane',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplanes loaded successfully.`
+  String get airplanesLoaded {
+    return Intl.message(
+      'Airplanes loaded successfully.',
+      name: 'airplanesLoaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation was canceled.`
+  String get operationCanceled {
+    return Intl.message(
+      'Operation was canceled.',
+      name: 'operationCanceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplanes`
+  String get airplanes {
+    return Intl.message(
+      'Airplanes',
+      name: 'airplanes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplane added successfully`
+  String get airplaneAdded {
+    return Intl.message(
+      'Airplane added successfully',
+      name: 'airplaneAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplane updated successfully.`
+  String get airplaneUpdated {
+    return Intl.message(
+      'Airplane updated successfully.',
+      name: 'airplaneUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Airplane edited successfully.`
+  String get airplaneEdited {
+    return Intl.message(
+      'Airplane edited successfully.',
+      name: 'airplaneEdited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Field Required`
+  String get fieldRequired {
+    return Intl.message(
+      'Field Required',
+      name: 'fieldRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer added successfully.`
+  String get customerAdded {
+    return Intl.message(
+      'Customer added successfully.',
+      name: 'customerAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer updated successfully.`
+  String get customerUpdated {
+    return Intl.message(
+      'Customer updated successfully.',
+      name: 'customerUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer deleted successfully.`
+  String get customerDeleted {
+    return Intl.message(
+      'Customer deleted successfully.',
+      name: 'customerDeleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Customer`
+  String get addCustomer {
+    return Intl.message(
+      'Add Customer',
+      name: 'addCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Customer`
+  String get editCustomer {
+    return Intl.message(
+      'Edit Customer',
+      name: 'editCustomer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `First Name`
+  String get firstName {
+    return Intl.message(
+      'First Name',
+      name: 'firstName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Name`
+  String get lastName {
+    return Intl.message(
+      'Last Name',
+      name: 'lastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Address`
+  String get address {
+    return Intl.message(
+      'Address',
+      name: 'address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birthday`
+  String get birthday {
+    return Intl.message(
+      'Birthday',
+      name: 'birthday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customers`
+  String get customers {
+    return Intl.message(
+      'Customers',
+      name: 'customers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Customer edited successfully.`
+  String get customerEdited {
+    return Intl.message(
+      'Customer edited successfully.',
+      name: 'customerEdited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Customer`
+  String get deleteCustomer {
+    return Intl.message(
+      'Delete Customer',
+      name: 'deleteCustomer',
       desc: '',
       args: [],
     );

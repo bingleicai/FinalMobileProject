@@ -1,78 +1,76 @@
 import 'package:flutter/material.dart';
 import 'database_helper.dart';
-import 'models/airplane.dart';
+import 'models/customer.dart';
 import 'generated/l10n.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';  // Import the secure storage package
 
-class AirplaneFormPage extends StatefulWidget {
-  final Airplane? airplane;
+class CustomerFormPage extends StatefulWidget {
+  final Customer? customer;
   final VoidCallback onSave;
   final VoidCallback onCancel;
 
-  AirplaneFormPage({this.airplane, required this.onSave, required this.onCancel});
+  CustomerFormPage({this.customer, required this.onSave, required this.onCancel});
 
   @override
-  _AirplaneFormPageState createState() => _AirplaneFormPageState();
+  _CustomerFormPageState createState() => _CustomerFormPageState();
 }
 
-class _AirplaneFormPageState extends State<AirplaneFormPage> {
+class _CustomerFormPageState extends State<CustomerFormPage> {
   final _formKey = GlobalKey<FormState>();
-  late String _type;
-  late int _numberOfPassengers;
-  late double _maxSpeed;
-  late double _range;
+  late String _firstName;
+  late String _lastName;
+  late String _address;
+  late String _birthday;
   DatabaseHelper _databaseHelper = DatabaseHelper();
-  final _storage = FlutterSecureStorage();  // Instance of the secure storage
 
   @override
   void initState() {
     super.initState();
-    _type = widget.airplane?.type ?? '';
-    _numberOfPassengers = widget.airplane?.numberOfPassengers ?? 0;
-    _maxSpeed = widget.airplane?.maxSpeed ?? 0.0;
-    _range = widget.airplane?.range ?? 0.0;
+    _firstName = widget.customer?.firstName ?? '';
+    _lastName = widget.customer?.lastName ?? '';
+    _address = widget.customer?.address ?? '';
+    _birthday = widget.customer?.birthday ?? '';
   }
 
-  Future<void> _saveAirplane() async {
+  Future<void> _saveCustomer() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      Airplane airplane = Airplane(
-        id: widget.airplane?.id,
-        type: _type,
-        numberOfPassengers: _numberOfPassengers,
-        maxSpeed: _maxSpeed,
-        range: _range,
+      Customer customer = Customer(
+        id: widget.customer?.id,
+        firstName: _firstName,
+        lastName: _lastName,
+        address: _address,
+        birthday: _birthday,
       );
-      bool isNew = widget.airplane == null;
+      bool isNew = widget.customer == null;
       if (isNew) {
-        await _databaseHelper.insertAirplane(airplane);
+        await _databaseHelper.insertCustomer(customer);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context).airplaneAdded)),
+          SnackBar(content: Text(S.of(context).customerAdded)),
         );
       } else {
-        await _databaseHelper.updateAirplane(airplane);
+        await _databaseHelper.updateCustomer(customer);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(S.of(context).airplaneUpdated)),
+          SnackBar(content: Text(S.of(context).customerUpdated)),
         );
       }
       widget.onSave();
       if (MediaQuery.of(context).size.width <= 600) {
-        Navigator.pop(context, true); // Navigate back to AirplaneListPage on mobile
+        Navigator.pop(context, true); // Navigate back to CustomerListPage on mobile
       }
     } else {
       _showAlertDialog(S.of(context).error, S.of(context).fillAllFields);
     }
   }
 
-  Future<void> _deleteAirplane() async {
-    if (widget.airplane != null) {
-      await _databaseHelper.deleteAirplane(widget.airplane!.id!);
+  Future<void> _deleteCustomer() async {
+    if (widget.customer != null) {
+      await _databaseHelper.deleteCustomer(widget.customer!.id!);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).airplaneDeleted)),
+        SnackBar(content: Text(S.of(context).customerDeleted)),
       );
       widget.onSave();
       if (MediaQuery.of(context).size.width <= 600) {
-        Navigator.pop(context, true); // Navigate back to AirplaneListPage on mobile
+        Navigator.pop(context, true); // Navigate back to CustomerListPage on mobile
       }
     }
   }
@@ -101,9 +99,9 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.airplane == null
-            ? S.of(context).addAirplane
-            : S.of(context).editAirplane),
+        title: Text(widget.customer == null
+            ? S.of(context).addCustomer
+            : S.of(context).editCustomer),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -112,8 +110,8 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
           child: Column(
             children: [
               TextFormField(
-                initialValue: _type,
-                decoration: InputDecoration(labelText: S.of(context).type),
+                initialValue: _firstName,
+                decoration: InputDecoration(labelText: S.of(context).firstName),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).fieldRequired;
@@ -121,13 +119,12 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _type = value!;
+                  _firstName = value!;
                 },
               ),
               TextFormField(
-                initialValue: _numberOfPassengers.toString(),
-                decoration: InputDecoration(labelText: S.of(context).numberOfPassengers),
-                keyboardType: TextInputType.number,
+                initialValue: _lastName,
+                decoration: InputDecoration(labelText: S.of(context).lastName),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).fieldRequired;
@@ -135,13 +132,12 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _numberOfPassengers = int.parse(value!);
+                  _lastName = value!;
                 },
               ),
               TextFormField(
-                initialValue: _maxSpeed.toString(),
-                decoration: InputDecoration(labelText: S.of(context).maxSpeed),
-                keyboardType: TextInputType.number,
+                initialValue: _address,
+                decoration: InputDecoration(labelText: S.of(context).address),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).fieldRequired;
@@ -149,13 +145,12 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _maxSpeed = double.parse(value!);
+                  _address = value!;
                 },
               ),
               TextFormField(
-                initialValue: _range.toString(),
-                decoration: InputDecoration(labelText: S.of(context).range),
-                keyboardType: TextInputType.number,
+                initialValue: _birthday,
+                decoration: InputDecoration(labelText: S.of(context).birthday),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return S.of(context).fieldRequired;
@@ -163,14 +158,14 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _range = double.parse(value!);
+                  _birthday = value!;
                 },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: _saveAirplane,
+                    onPressed: _saveCustomer,
                     child: Text(S.of(context).save),
                   ),
                   SizedBox(width: 8),
@@ -178,15 +173,15 @@ class _AirplaneFormPageState extends State<AirplaneFormPage> {
                     onPressed: () {
                       widget.onCancel();
                       if (MediaQuery.of(context).size.width <= 600) {
-                        Navigator.pop(context); // Navigate back to AirplaneListPage on mobile
+                        Navigator.pop(context); // Navigate back to CustomerListPage on mobile
                       }
                     },
                     child: Text(S.of(context).cancel),
                   ),
-                  if (widget.airplane != null) ...[
+                  if (widget.customer != null) ...[
                     SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: _deleteAirplane,
+                      onPressed: _deleteCustomer,
                       child: Text(S.of(context).delete),
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     ),

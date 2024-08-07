@@ -14,6 +14,7 @@ class FlightListPage extends StatefulWidget {
 class _FlightListPageState extends State<FlightListPage> {
   List<Flight> flights = [];
   DatabaseHelper databaseHelper = DatabaseHelper();
+  String? selectedFlightId;
 
   @override
   void initState() {
@@ -25,6 +26,9 @@ class _FlightListPageState extends State<FlightListPage> {
     final data = await databaseHelper.getFlights();
     setState(() {
       flights = data.map((item) => Flight.fromJson(item)).toList();
+      if (flights.isNotEmpty) {
+        selectedFlightId = flights.first.id.toString(); // Set an initial value
+      }
     });
   }
 
@@ -36,26 +40,47 @@ class _FlightListPageState extends State<FlightListPage> {
       ),
       body: flights.isEmpty
           ? Center(child: Text(S.of(context).noFlightsFound))
-          : ListView.builder(
-        itemCount: flights.length,
-        itemBuilder: (context, index) {
-          final flight = flights[index];
-          return ListTile(
-            title: Text('${flight.departureCity} -> ${flight.destinationCity}'),
-            subtitle: Text(
-              '${DateFormat.yMd().add_jm().format(DateTime.parse(flight.departureTime))} - ${DateFormat.yMd().add_jm().format(DateTime.parse(flight.arrivalTime))}',
+          : Column(
+        children: [
+          if (selectedFlightId != null)
+            DropdownButton<String>(
+              value: selectedFlightId,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedFlightId = newValue;
+                });
+              },
+              items: flights.map<DropdownMenuItem<String>>((Flight flight) {
+                return DropdownMenuItem<String>(
+                  value: flight.id.toString(),
+                  child: Text('${flight.departureCity} -> ${flight.destinationCity}'),
+                );
+              }).toList(),
             ),
-            onTap: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FlightDetailPage(flight: flight)),
-              );
-              if (result == true) {
-                _loadFlights(); // Refresh the list if the flight was updated or deleted
-              }
-            },
-          );
-        },
+          Expanded(
+            child: ListView.builder(
+              itemCount: flights.length,
+              itemBuilder: (context, index) {
+                final flight = flights[index];
+                return ListTile(
+                  title: Text('${flight.departureCity} -> ${flight.destinationCity}'),
+                  subtitle: Text(
+                    '${DateFormat.yMd().add_jm().format(DateTime.parse(flight.departureTime))} - ${DateFormat.yMd().add_jm().format(DateTime.parse(flight.arrivalTime))}',
+                  ),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FlightDetailPage(flight: flight)),
+                    );
+                    if (result == true) {
+                      _loadFlights(); // Refresh the list if the flight was updated or deleted
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -72,3 +97,5 @@ class _FlightListPageState extends State<FlightListPage> {
     );
   }
 }
+
+
