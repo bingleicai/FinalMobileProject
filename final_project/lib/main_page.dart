@@ -64,6 +64,7 @@ class _MainPageState extends State<MainPage> {
               },
               child: Text(S.of(context).airplaneList),
             ),
+            SizedBox(height: 20), // Add vertical space
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -73,6 +74,7 @@ class _MainPageState extends State<MainPage> {
               },
               child: Text(S.of(context).flightList),
             ),
+            SizedBox(height: 20), // Add vertical space
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -82,6 +84,7 @@ class _MainPageState extends State<MainPage> {
               },
               child: Text(S.of(context).customerList),
             ),
+            SizedBox(height: 20), // Add vertical space
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

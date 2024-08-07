@@ -178,7 +178,7 @@ class _FlightFormPageState extends State<FlightFormPage> {
                 },
               ),
               DropdownButtonFormField<int>(
-                value: _selectedAirplaneId,
+                value: _selectedAirplaneId != 0 ? _selectedAirplaneId : null,
                 decoration: InputDecoration(labelText: S.of(context).selectAirplane),
                 items: _airplanes.map((airplane) {
                   return DropdownMenuItem<int>(
